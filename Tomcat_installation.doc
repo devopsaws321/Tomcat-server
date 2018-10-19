@@ -1,0 +1,49 @@
+NOTE:
+	YOUTUBE:https://www.youtube.com/watch?v=m21nFreFw8A&list=PLxzKY3wu0_FJdJd3IKdiM4Om1hGo2Hsdt&index=13
+	
+ *******************Steps to install Tomcat on Linux*************************
+ 1.	Launch a Redhat Linux Server
+ 2.	Install java and set path
+	# yum install java-1.8*
+	# java -version
+	# export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.181-8.b13.39.39.amzn1.x86_64
+	# echo $PATH
+	# vi ~/.bash_profile
+		JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.181-8.b13.39.39.amzn1.x86_64/
+		PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+	# source ~/.bash_profile
+	edit /etc/profile file to set JAVA_HOME path permanently for all users
+ 3.	Download tomcat package from https://tomcat.apache.org/download-80.cgi
+	# cd /opt/
+	# wget http://mirrors.estointernet.in/apache/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.tar.gz	
+ 4. copy and extract giz file under to /opt/tomcat directory
+	# tar -zxvf apache-tomcat-8.5.34.tar.gz
+	# cd bin/
+	# ps -ef |grep  tomcat
+	# chmod +x startup.sh 
+	# chmod +x shutdown.sh 
+	# echo $PATH
+	# ln -s /opt/apache-tomcat-8.5.34/bin/startup.sh /bin/tomcatup
+	# ln -s /opt/apache-tomcat-8.5.34/bin/shutdown.sh /bin/tomcatdown
+ 5. Uncomment the below file in  lines for context manager-gui
+ 	# vi /opt/apache-tomcat-8.5.34/webapps/host-manager/META-INF/context.xml
+	# vi /opt/apache-tomcat-8.5.34/webapps/manager/META-INF/context.xml
+ 
+ 5. Add below users to tomcat-user.xml file under conf directory in tomcat
+	# vi tomcat-users.xml 
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="admin" password="admin" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
+	<user username="deployer" password="deployer" roles="manager-script"/>
+	<user username="tomcat" password="s3cret" roles="manager-gui"/>
+ 6.	Change default port number (8080) to 8090. Because jenkis also port 8080. none of the ports in a same in one Environment
+	# vi server.xml
+ 7.	start tomcat services by using startup.sh under bin directory
+ Additional step:
+ -----------------
+		create a link file to start/stop service if necessary
+ Check point:
+ ------------
+ Access to tomcat goto browser http://<ip-address-machine>:8090 ,you hava able to see default tomcat page
